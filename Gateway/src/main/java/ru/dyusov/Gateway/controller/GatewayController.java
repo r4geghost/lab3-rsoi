@@ -189,7 +189,7 @@ public class GatewayController {
         TicketResponse[] tickets = circuitBreakerFactory.create("TicketServiceCircuitBreaker")
                 .run(() -> getTickets(username), throwable -> null);
         PrivilegeResponse privilege = circuitBreakerFactory.create("BonusServiceCircuitBreaker")
-                .run(() -> getPrivilegeInfo(username).getBody(), throwable -> null);
+                .run(() -> getPrivilegeInfo(username).getBody(), throwable -> (PrivilegeResponse) new Object());
         return InfoResponse.build(tickets, privilege);
     }
 
