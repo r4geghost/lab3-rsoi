@@ -194,6 +194,8 @@ public class GatewayController {
         body.put("tickets", tickets);
         if (privilege != null) {
             body.put("privilege", privilege);
+        } else {
+            body.put("privilege", "");
         }
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
