@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 
 IFS="," read -ra PORTS <<<"$WAIT_PORTS"
