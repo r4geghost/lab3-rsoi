@@ -185,12 +185,17 @@ public class GatewayController {
 
 
     @GetMapping("/me")
-    public InfoResponse getUserInfo(@RequestHeader(name = "X-User-Name") String username) throws Exception {
+    public ResponseEntity getUserInfo(@RequestHeader(name = "X-User-Name") String username) throws Exception {
         TicketResponse[] tickets = circuitBreakerFactory.create("TicketServiceCircuitBreaker")
                 .run(() -> getTickets(username), throwable -> null);
         PrivilegeResponse privilege = circuitBreakerFactory.create("BonusServiceCircuitBreaker")
-                .run(() -> getPrivilegeInfo(username).getBody(), throwable -> (PrivilegeResponse) new Object());
-        return InfoResponse.build(tickets, privilege);
+                .run(() -> getPrivilegeInfo(username).getBody(), throwable -> null);
+        Map<String, Object> body = new HashMap<>();
+        body.put("tickets", tickets);
+        if (privilege != null) {
+            body.put("privilege", privilege);
+        }
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
     @GetMapping("/tickets/{ticketUid}")
